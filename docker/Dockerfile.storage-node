@@ -1,0 +1,19 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY packages/shared/package.json ./packages/shared/
+COPY services/storage-node/package.json ./services/storage-node/
+
+RUN npm install
+
+COPY packages/shared ./packages/shared
+COPY services/storage-node ./services/storage-node
+
+RUN npm run build --workspace=@vault/shared
+RUN npm run build --workspace=@vault/storage-node
+
+EXPOSE 5001
+
+CMD ["npm", "run", "start", "--workspace=@vault/storage-node"]

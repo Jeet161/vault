@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: vault-postgres
+    environment:
+      POSTGRES_USER: vault
+      POSTGRES_PASSWORD: vaultpassword
+      POSTGRES_DB: vault_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vault -d vault_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: vault-redis
+    ports:
+      - "6379:6379"
+
+  storage-node-1:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.storage-node
+    container_name: vault-node-1
+    environment:
+      PORT: 5001
+      NODE_ID: node-1
+      NODE_NAME: "Storage Node 1"
+    ports:
+      - "5001:5001"
+    volumes:
+      - node1_data:/app/data
+
+  storage-node-2:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.storage-node
+    container_name: vault-node-2
+    environment:
+      PORT: 5002
+      NODE_ID: node-2
+      NODE_NAME: "Storage Node 2"
+    ports:
+      - "5002:5002"
+    volumes:
+      - node2_data:/app/data
+
+  storage-node-3:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.storage-node
+    container_name: vault-node-3
+    environment:
+      PORT: 5003
+      NODE_ID: node-3
+      NODE_NAME: "Storage Node 3"
+    ports:
+      - "5003:5003"
+    volumes:
+      - node3_data:/app/data
+
+  storage-node-4:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.storage-node
+    container_name: vault-node-4
+    environment:
+      PORT: 5004
+      NODE_ID: node-4
+      NODE_NAME: "Storage Node 4"
+    ports:
+      - "5004:5004"
+    volumes:
+      - node4_data:/app/data
+
+volumes:
+  postgres_data:
+  node1_data:
+  node2_data:
+  node3_data:
+  node4_data:

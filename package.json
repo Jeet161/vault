@@ -1,0 +1,30 @@
+{
+  "name": "vault-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "services/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently --kill-others -n node1,node2,node3,node4,control,web -c blue,cyan,magenta,yellow,green,red \"npm run dev:node1\" \"npm run dev:node2\" \"npm run dev:node3\" \"npm run dev:node4\" \"npm run dev:control\" \"npm run dev:web\"",
+    "dev:node1": "npm run dev --workspace=services/storage-node -- --port 5001 --id node-1 --name \"Storage Node 1\"",
+    "dev:node2": "npm run dev --workspace=services/storage-node -- --port 5002 --id node-2 --name \"Storage Node 2\"",
+    "dev:node3": "npm run dev --workspace=services/storage-node -- --port 5003 --id node-3 --name \"Storage Node 3\"",
+    "dev:node4": "npm run dev --workspace=services/storage-node -- --port 5004 --id node-4 --name \"Storage Node 4\"",
+    "dev:control": "npm run dev --workspace=apps/control-plane",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspaces",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "dotenv": "^18.0.4"
+  }
+}
