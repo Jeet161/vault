@@ -81,8 +81,8 @@ export const DEFAULT_REPLICATION_FACTOR = 3;
  */
 export function calculateRiskScore(node: {
   status: NodeStatus;
-  capacity: number;
-  usedStorage: number;
+  capacity: number | bigint;
+  usedStorage: number | bigint;
   failureCount: number;
   load: number;
 }): number {
@@ -92,7 +92,9 @@ export function calculateRiskScore(node: {
   if (node.status === 'DEGRADED') healthPenalty = 0.4;
   if (node.status === 'RECOVERING') healthPenalty = 0.2;
 
-  const usageRatio = node.capacity > 0 ? node.usedStorage / node.capacity : 0;
+  const cap = Number(node.capacity);
+  const used = Number(node.usedStorage);
+  const usageRatio = cap > 0 ? used / cap : 0;
   const failurePenalty = Math.min(node.failureCount * 0.15, 0.45);
   const loadPenalty = Math.min(node.load * 0.2, 0.2);
 
