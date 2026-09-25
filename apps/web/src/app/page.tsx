@@ -8,7 +8,7 @@ import {
   Database, TrendingUp, Clock, Lock, ChevronRight
 } from 'lucide-react';
 
-const API_BASE = 'http://localhost:4000';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 /* ─── tiny helpers ─────────────────────────────────────────── */
 function formatBytes(bytes: number) {
@@ -42,7 +42,7 @@ function Badge({ variant, children }: { variant: 'green' | 'red' | 'amber' | 'ne
     green: 'bg-green-500/10 border-green-500/20 text-green-400',
     red:   'bg-red-500/10   border-red-500/20   text-red-400',
     amber: 'bg-amber-500/10 border-amber-500/20 text-amber-400',
-    neutral:'bg-white/5     border-blue-200      text-zinc-500',
+    neutral:'bg-[#091126]/5     border-[#1E2D5A]      text-zinc-400',
   };
   return (
     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border text-[10px] font-semibold tracking-wide uppercase ${cls[variant]}`}>
@@ -59,7 +59,7 @@ function MetricCard({
 }) {
   const iconColors: Record<string, string> = {
     green: 'text-green-400', amber: 'text-amber-400',
-    red: 'text-red-400', neutral: 'text-zinc-500',
+    red: 'text-red-400', neutral: 'text-zinc-400',
   };
   const barColors: Record<string, string> = {
     green: 'bg-green-500', amber: 'bg-amber-500',
@@ -67,19 +67,19 @@ function MetricCard({
   };
   return (
     <div
-      className="group relative bg-vault-card border border-vault-border rounded-xl p-5 hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 cursor-default"
+      className="group relative bg-[#091126] border border-[#1E2D5A] rounded-xl p-5 hover:border-[#2a4080] hover:bg-[#0d1835] transition-all duration-200 cursor-default"
       style={{ animation: 'fadeUp 0.3s ease forwards' }}
     >
       <div className="flex items-start justify-between mb-4">
-        <span className="text-xs font-medium text-zinc-500 tracking-wide uppercase">{label}</span>
-        <div className={`p-1.5 rounded-lg bg-blue-100/50 ${iconColors[accent]}`}>
+        <span className="text-xs font-medium text-zinc-400 tracking-wide uppercase">{label}</span>
+        <div className={`p-1.5 rounded-lg bg-blue-500/[0.12] ${iconColors[accent]}`}>
           <Icon className="w-3.5 h-3.5" />
         </div>
       </div>
-      <div className="text-2xl font-bold text-zinc-900 tracking-tight mb-1">{value}</div>
-      {sub && <div className="text-xs text-zinc-700 mt-1">{sub}</div>}
+      <div className="text-2xl font-bold text-zinc-100 tracking-tight mb-1">{value}</div>
+      {sub && <div className="text-xs text-zinc-200 mt-1">{sub}</div>}
       {typeof bar === 'number' && (
-        <div className="mt-3 h-[2px] bg-[#1f1f1f] rounded-full overflow-hidden">
+        <div className="mt-3 h-[2px] bg-[#1E2D5A] rounded-full overflow-hidden">
           <div className={`h-full rounded-full transition-all duration-700 ${barColors[accent]}`} style={{ width: `${Math.min(bar, 100)}%` }} />
         </div>
       )}
@@ -107,23 +107,23 @@ function NodeCard({
 
   return (
     <div
-      className={`relative bg-vault-card border rounded-xl p-4 flex flex-col gap-4 transition-all duration-200 hover:bg-blue-50 ${
+      className={`relative bg-vault-card border rounded-xl p-4 flex flex-col gap-4 transition-all duration-200 hover:bg-[#091126] ${
         isFailed
           ? 'border-red-500/30 bg-red-500/[0.03]'
           : isDegraded
           ? 'border-amber-500/25'
-          : 'border-vault-border hover:border-blue-300'
+          : 'border-[#1E2D5A] hover:border-[#2a4080]'
       }`}
     >
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-2.5">
-          <div className={`p-1.5 rounded-lg ${isFailed ? 'bg-red-500/10' : isDegraded ? 'bg-amber-500/10' : 'bg-blue-100/50'}`}>
-            <Server className={`w-3.5 h-3.5 ${isFailed ? 'text-red-400' : isDegraded ? 'text-amber-400' : 'text-zinc-500'}`} />
+          <div className={`p-1.5 rounded-lg ${isFailed ? 'bg-red-500/10' : isDegraded ? 'bg-amber-500/10' : 'bg-vault-bg'}`}>
+            <Server className={`w-3.5 h-3.5 ${isFailed ? 'text-red-400' : isDegraded ? 'text-amber-400' : 'text-zinc-400'}`} />
           </div>
           <div>
-            <div className="text-sm font-semibold text-zinc-900">{node.name}</div>
-            <div className="text-[10px] text-zinc-500 font-mono mt-0.5">{node.address}</div>
+            <div className="text-sm font-semibold text-zinc-100">{node.name}</div>
+            <div className="text-[10px] text-zinc-400 font-mono mt-0.5">{node.address}</div>
           </div>
         </div>
         <Badge variant={isFailed ? 'red' : isDegraded ? 'amber' : 'green'}>
@@ -133,12 +133,12 @@ function NodeCard({
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 gap-2">
-        <div className="bg-white border border-blue-200 rounded-lg p-2.5">
-          <div className="text-[10px] text-zinc-500 mb-1">Replicas</div>
-          <div className="text-sm font-bold text-zinc-800 font-mono">{node.replicaCount ?? 0}</div>
+        <div className="bg-[#091126] border border-[#1E2D5A] rounded-lg p-2.5">
+          <div className="text-[10px] text-zinc-400 mb-1">Replicas</div>
+          <div className="text-sm font-bold text-zinc-100 font-mono">{node.replicaCount ?? 0}</div>
         </div>
-        <div className="bg-white border border-blue-200 rounded-lg p-2.5">
-          <div className="text-[10px] text-zinc-500 mb-1">Risk Score</div>
+        <div className="bg-[#091126] border border-[#1E2D5A] rounded-lg p-2.5">
+          <div className="text-[10px] text-zinc-400 mb-1">Risk Score</div>
           <div className={`text-sm font-bold font-mono ${(node.riskScore || 0) > 0.5 ? 'text-red-400' : 'text-green-400'}`}>
             {node.riskScore ?? 0}
           </div>
@@ -148,10 +148,10 @@ function NodeCard({
       {/* Storage bar */}
       <div>
         <div className="flex justify-between items-center mb-1.5">
-          <span className="text-[10px] text-zinc-500">Storage Used</span>
-          <span className="text-[10px] font-mono text-zinc-500">{formatBytes(node.usedStorage || 0)}</span>
+          <span className="text-[10px] text-zinc-400">Storage Used</span>
+          <span className="text-[10px] font-mono text-zinc-400">{formatBytes(node.usedStorage || 0)}</span>
         </div>
-        <div className="h-[3px] bg-blue-100 rounded-full overflow-hidden">
+        <div className="h-[3px] bg-[#1E2D5A] rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-700 ${usagePercent > 80 ? 'bg-red-500' : usagePercent > 50 ? 'bg-amber-500' : 'bg-green-500'}`}
             style={{ width: `${usagePercent}%` }}
@@ -160,10 +160,10 @@ function NodeCard({
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-2 pt-1 border-t border-blue-200">
+      <div className="flex items-center gap-2 pt-1 border-t border-[#1E2D5A]">
         <button
           onClick={() => onInspect(node.id)}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-medium text-zinc-500 hover:text-zinc-900 bg-white hover:bg-blue-100 border border-vault-border rounded-lg transition"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-medium text-zinc-400 hover:text-zinc-100 bg-[#091126] hover:bg-[#1a2f60] border border-[#1E2D5A] rounded-lg transition"
         >
           <Eye className="w-3 h-3" />
           Inspect
@@ -388,11 +388,11 @@ export default function Dashboard() {
       ? 'border-green-500/30 bg-green-500/10 text-green-300'
       : toast.type === 'error'
       ? 'border-red-500/30 bg-red-500/10 text-red-300'
-      : 'border-[#2e2e2e] bg-[#161616] text-zinc-700'
+      : 'border-[#2a4080] bg-[#161616] text-zinc-200'
     : '';
 
   return (
-    <div className="min-h-screen bg-vault-bg text-zinc-900">
+    <div className="min-h-screen bg-vault-bg text-slate-200">
       {/* Hidden file input */}
       <input
         type="file"
@@ -403,16 +403,16 @@ export default function Dashboard() {
       />
 
       {/* ─── TOPBAR ─────────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 bg-vault-bg/90 backdrop-blur-xl border-b border-vault-border">
+      <header className="sticky top-0 z-40 bg-vault-bg/90 backdrop-blur-xl border-b border-[#1E2D5A]">
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           {/* Brand */}
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-blue-100 border border-blue-200 flex items-center justify-center">
-              <Database className="w-3.5 h-3.5 text-zinc-700" />
+            <div className="w-7 h-7 rounded-lg bg-[#1a1a1a] border border-[#1E2D5A] flex items-center justify-center">
+              <Database className="w-3.5 h-3.5 text-zinc-200" />
             </div>
             <div>
-              <span className="text-sm font-bold text-zinc-900 tracking-widest">VAULT</span>
-              <span className="hidden sm:inline text-xs text-zinc-500 ml-2 font-mono">v2.0</span>
+              <span className="text-sm font-bold text-zinc-100 tracking-widest">VAULT</span>
+              <span className="hidden sm:inline text-xs text-zinc-400 ml-2 font-mono">v2.0</span>
             </div>
           </div>
 
@@ -427,16 +427,16 @@ export default function Dashboard() {
             )}
 
             {/* Cluster health badge */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-vault-card border border-vault-border text-xs">
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-vault-card border border-[#1E2D5A] text-xs">
               <StatusDot healthy={clusterHealthy} />
-              <span className="text-zinc-500 font-medium">
+              <span className="text-zinc-400 font-medium">
                 {clusterHealthy ? 'Healthy' : 'Self-Healing'}
               </span>
             </div>
 
             <button
               onClick={fetchData}
-              className="p-1.5 rounded-lg bg-vault-card border border-vault-border text-zinc-500 hover:text-zinc-800 hover:bg-blue-100 transition"
+              className="p-1.5 rounded-lg bg-vault-card border border-[#1E2D5A] text-zinc-400 hover:text-zinc-100 hover:bg-[#1a2f60] transition"
               title="Refresh"
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -482,17 +482,17 @@ export default function Dashboard() {
 
         {/* ─── CHAOS CONTROL ──────────────────────────────── */}
         <section className="mb-8">
-          <div className="bg-vault-card border border-vault-border rounded-xl p-5">
+          <div className="bg-[#091126] border border-[#1E2D5A] rounded-xl p-5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <Flame className="w-4 h-4 text-red-400" />
-                  <h2 className="text-sm font-bold text-zinc-900">Chaos Engineering</h2>
+                  <h2 className="text-sm font-bold text-zinc-100">Chaos Engineering</h2>
                   <span className="px-2 py-0.5 rounded-md bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-semibold uppercase tracking-wide">
                     Live Sim
                   </span>
                 </div>
-                <p className="text-xs text-zinc-500">Trigger node failures, disk corruption, or full cluster recovery in real-time.</p>
+                <p className="text-xs text-zinc-400">Trigger node failures, disk corruption, or full cluster recovery in real-time.</p>
               </div>
 
               <div className="flex flex-wrap gap-2">
@@ -519,7 +519,7 @@ export default function Dashboard() {
                 </button>
                 <button
                   onClick={handleProvisionNode}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-zinc-700 bg-blue-100 hover:bg-blue-200 border border-blue-200 transition"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-zinc-200 bg-[#1a1a1a] hover:bg-[#1a2f60] border border-[#1E2D5A] transition"
                 >
                   <Zap className="w-3.5 h-3.5 text-amber-400" />
                   Add Node
@@ -527,7 +527,7 @@ export default function Dashboard() {
                 <button
                   onClick={handleDeprovisionExcess}
                   title="Remove idle auto-provisioned nodes that hold no data"
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-zinc-500 bg-white/[0.03] hover:bg-blue-100 border border-white/[0.08] hover:border-white/[0.15] transition"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-zinc-400 bg-[#091126]/[0.03] hover:bg-[#1a2f60] border border-blue-400/15 hover:border-blue-400/30 transition"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   Clean Nodes
@@ -541,16 +541,16 @@ export default function Dashboard() {
         <section className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-sm font-bold text-zinc-900">Storage Nodes</h2>
-              <p className="text-xs text-zinc-500 mt-0.5">Independent microservice cluster with risk-aware placement</p>
+              <h2 className="text-sm font-bold text-zinc-100">Storage Nodes</h2>
+              <p className="text-xs text-zinc-400 mt-0.5">Independent microservice cluster with risk-aware placement</p>
             </div>
-            <span className="text-xs text-zinc-500 font-mono">{nodes.length} registered</span>
+            <span className="text-xs text-zinc-400 font-mono">{nodes.length} registered</span>
           </div>
 
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className="h-52 bg-vault-card border border-vault-border rounded-xl animate-pulse" />
+                <div key={i} className="h-52 bg-vault-card border border-[#1E2D5A] rounded-xl animate-pulse" />
               ))}
             </div>
           ) : (
@@ -565,7 +565,7 @@ export default function Dashboard() {
                 />
               ))}
               {nodes.length === 0 && (
-                <div className="col-span-4 py-16 text-center text-zinc-500 text-sm border border-vault-border rounded-xl bg-vault-card">
+                <div className="col-span-4 py-16 text-center text-zinc-400 text-sm border border-[#1E2D5A] rounded-xl bg-vault-card">
                   No storage nodes found.
                 </div>
               )}
@@ -575,42 +575,42 @@ export default function Dashboard() {
 
         {/* ─── TABS: OBJECTS / REPAIRS ─────────────────────── */}
         <section>
-          <div className="flex items-center gap-1 mb-4 p-1 bg-vault-card border border-vault-border rounded-xl w-fit">
+          <div className="flex items-center gap-1 mb-4 p-1 bg-vault-card border border-[#1E2D5A] rounded-xl w-fit">
             <button
               onClick={() => setActiveTab('objects')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${activeTab === 'objects' ? 'bg-blue-200 text-zinc-900' : 'text-zinc-500 hover:text-zinc-700'}`}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${activeTab === 'objects' ? 'bg-[#1a1a1a] text-zinc-100' : 'text-zinc-400 hover:text-zinc-200'}`}
             >
               <HardDrive className="w-3.5 h-3.5" />
               Objects
               {objects.length > 0 && (
-                <span className="ml-1 px-1.5 py-0.5 rounded-md bg-blue-100 text-zinc-500 text-[10px]">{objects.length}</span>
+                <span className="ml-1 px-1.5 py-0.5 rounded-md bg-[#1a1a1a] text-zinc-400 text-[10px]">{objects.length}</span>
               )}
             </button>
             <button
               onClick={() => setActiveTab('repairs')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${activeTab === 'repairs' ? 'bg-blue-200 text-zinc-900' : 'text-zinc-500 hover:text-zinc-700'}`}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${activeTab === 'repairs' ? 'bg-[#1a1a1a] text-zinc-100' : 'text-zinc-400 hover:text-zinc-200'}`}
             >
               <ShieldCheck className="w-3.5 h-3.5" />
               Repair Log
               {repairs.length > 0 && (
-                <span className="ml-1 px-1.5 py-0.5 rounded-md bg-blue-100 text-zinc-500 text-[10px]">{repairs.length}</span>
+                <span className="ml-1 px-1.5 py-0.5 rounded-md bg-[#1a1a1a] text-zinc-400 text-[10px]">{repairs.length}</span>
               )}
             </button>
           </div>
 
           {/* Objects tab */}
           {activeTab === 'objects' && (
-            <div className="bg-vault-card border border-vault-border rounded-xl overflow-hidden">
+            <div className="bg-[#091126] border border-[#1E2D5A] rounded-xl overflow-hidden">
               {/* Tab header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-blue-200">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[#1E2D5A]">
                 <div>
-                  <h3 className="text-sm font-semibold text-zinc-900">Distributed Objects</h3>
-                  <p className="text-xs text-zinc-500 mt-0.5">RF = 3 · Stored on node filesystems</p>
+                  <h3 className="text-sm font-semibold text-zinc-100">Distributed Objects</h3>
+                  <p className="text-xs text-zinc-400 mt-0.5">RF = 3 · Stored on node filesystems</p>
                 </div>
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploading}
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-zinc-100 hover:bg-white text-zinc-900 text-xs font-bold transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-500 hover:bg-blue-400 text-white text-xs font-bold transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Upload className="w-3.5 h-3.5" />
                   {uploading ? 'Uploading…' : 'Upload Object'}
@@ -621,41 +621,41 @@ export default function Dashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full text-xs">
                   <thead>
-                    <tr className="border-b border-blue-200">
-                      <th className="px-5 py-3 text-left font-medium text-zinc-500">File</th>
-                      <th className="px-5 py-3 text-left font-medium text-zinc-500">Size</th>
-                      <th className="px-5 py-3 text-left font-medium text-zinc-500">Health</th>
-                      <th className="px-5 py-3 text-left font-medium text-zinc-500 hidden md:table-cell">Checksum</th>
-                      <th className="px-5 py-3 text-left font-medium text-zinc-500">Replicas</th>
-                      <th className="px-5 py-3 text-right font-medium text-zinc-500">Actions</th>
+                    <tr className="border-b border-[#1E2D5A]">
+                      <th className="px-5 py-3 text-left font-medium text-zinc-400">File</th>
+                      <th className="px-5 py-3 text-left font-medium text-zinc-400">Size</th>
+                      <th className="px-5 py-3 text-left font-medium text-zinc-400">Health</th>
+                      <th className="px-5 py-3 text-left font-medium text-zinc-400 hidden md:table-cell">Checksum</th>
+                      <th className="px-5 py-3 text-left font-medium text-zinc-400">Replicas</th>
+                      <th className="px-5 py-3 text-right font-medium text-zinc-400">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {objects.length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="px-5 py-16 text-center text-zinc-500">
+                        <td colSpan={6} className="px-5 py-16 text-center text-zinc-400">
                           No objects stored yet. Upload a file to test placement &amp; self-healing.
                         </td>
                       </tr>
                     ) : (
                       objects.map((obj, idx) => (
-                        <tr key={obj.id} className="border-b border-[#161616] hover:bg-blue-50 transition">
+                        <tr key={obj.id} className="border-b border-[#161616] hover:bg-[#091126] transition">
                           <td className="px-5 py-3.5">
                             <div className="flex items-center gap-2">
-                              <div className="p-1.5 bg-blue-100 rounded-md">
-                                <FileText className="w-3.5 h-3.5 text-zinc-500" />
+                              <div className="p-1.5 bg-[#1a1a1a] rounded-md">
+                                <FileText className="w-3.5 h-3.5 text-zinc-400" />
                               </div>
-                              <span className="text-zinc-800 font-medium max-w-[160px] truncate">{obj.filename}</span>
+                              <span className="text-zinc-100 font-medium max-w-[160px] truncate">{obj.filename}</span>
                             </div>
                           </td>
-                          <td className="px-5 py-3.5 text-zinc-500 font-mono">{formatBytes(obj.size)}</td>
+                          <td className="px-5 py-3.5 text-zinc-400 font-mono">{formatBytes(obj.size)}</td>
                           <td className="px-5 py-3.5">
                             <Badge variant={obj.healthyReplicas >= 3 ? 'green' : obj.healthyReplicas > 0 ? 'amber' : 'red'}>
                               {obj.healthyReplicas}/{obj.replicationFactor}
                             </Badge>
                           </td>
                           <td className="px-5 py-3.5 hidden md:table-cell">
-                            <span className="font-mono text-[11px] text-zinc-500 bg-white border border-blue-200 px-2 py-1 rounded-md">
+                            <span className="font-mono text-[11px] text-zinc-400 bg-[#091126] border border-[#1E2D5A] px-2 py-1 rounded-md">
                               {obj.checksum?.slice(0, 10)}…
                             </span>
                           </td>
@@ -668,7 +668,7 @@ export default function Dashboard() {
                                   title={`${rep.status} on ${rep.nodeName} — click to simulate corruption`}
                                   className={`px-2 py-0.5 rounded-md border text-[10px] font-medium transition ${
                                     rep.status === 'HEALTHY' && rep.nodeStatus !== 'FAILED'
-                                      ? 'bg-white border-blue-200 text-zinc-500 hover:border-red-500/30 hover:text-red-400'
+                                      ? 'bg-[#091126] border-[#1E2D5A] text-zinc-400 hover:border-red-500/30 hover:text-red-400'
                                       : 'bg-red-500/10 border-red-500/20 text-red-400'
                                   }`}
                                 >
@@ -682,7 +682,7 @@ export default function Dashboard() {
                             <div className="flex items-center justify-end gap-1.5">
                               <button
                                 onClick={() => handleVerifyObject(obj.id)}
-                                className="p-1.5 rounded-md bg-white border border-blue-200 text-zinc-500 hover:text-zinc-800 hover:bg-blue-100 transition"
+                                className="p-1.5 rounded-md bg-[#091126] border border-[#1E2D5A] text-zinc-400 hover:text-zinc-100 hover:bg-[#1a2f60] transition"
                                 title="Verify SHA-256 integrity"
                               >
                                 <ShieldCheck className="w-3.5 h-3.5" />
@@ -690,14 +690,14 @@ export default function Dashboard() {
                               <a
                                 href={`${API_BASE}/objects/${obj.id}`}
                                 download
-                                className="p-1.5 rounded-md bg-white border border-blue-200 text-zinc-500 hover:text-zinc-800 hover:bg-blue-100 transition"
+                                className="p-1.5 rounded-md bg-[#091126] border border-[#1E2D5A] text-zinc-400 hover:text-zinc-100 hover:bg-[#1a2f60] transition"
                                 title="Download"
                               >
                                 <Download className="w-3.5 h-3.5" />
                               </a>
                               <button
                                 onClick={() => handleDeleteObject(obj.id)}
-                                className="p-1.5 rounded-md bg-white border border-red-500/10 text-zinc-500 hover:text-red-400 hover:bg-red-500/8 transition"
+                                className="p-1.5 rounded-md bg-[#091126] border border-red-500/10 text-zinc-400 hover:text-red-400 hover:bg-red-500/8 transition"
                                 title="Delete object"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -715,11 +715,11 @@ export default function Dashboard() {
 
           {/* Repairs tab */}
           {activeTab === 'repairs' && (
-            <div className="bg-vault-card border border-vault-border rounded-xl overflow-hidden">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-blue-200">
+            <div className="bg-[#091126] border border-[#1E2D5A] rounded-xl overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-[#1E2D5A]">
                 <div>
-                  <h3 className="text-sm font-semibold text-zinc-900">Self-Healing Repair Jobs</h3>
-                  <p className="text-xs text-zinc-500 mt-0.5">BullMQ recovery engine · Auto-triggered</p>
+                  <h3 className="text-sm font-semibold text-zinc-100">Self-Healing Repair Jobs</h3>
+                  <p className="text-xs text-zinc-400 mt-0.5">BullMQ recovery engine · Auto-triggered</p>
                 </div>
                 <Badge variant={repairs.filter(r => r.status === 'IN_PROGRESS').length > 0 ? 'amber' : 'green'}>
                   {repairs.filter(r => r.status === 'IN_PROGRESS').length > 0
@@ -731,31 +731,31 @@ export default function Dashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full text-xs">
                   <thead>
-                    <tr className="border-b border-blue-200">
-                      <th className="px-5 py-3 text-left font-medium text-zinc-500">Job ID</th>
-                      <th className="px-5 py-3 text-left font-medium text-zinc-500">Reason</th>
-                      <th className="px-5 py-3 text-left font-medium text-zinc-500">Source</th>
-                      <th className="px-5 py-3 text-left font-medium text-zinc-500">Destination</th>
-                      <th className="px-5 py-3 text-left font-medium text-zinc-500">Status</th>
-                      <th className="px-5 py-3 text-right font-medium text-zinc-500">Time</th>
+                    <tr className="border-b border-[#1E2D5A]">
+                      <th className="px-5 py-3 text-left font-medium text-zinc-400">Job ID</th>
+                      <th className="px-5 py-3 text-left font-medium text-zinc-400">Reason</th>
+                      <th className="px-5 py-3 text-left font-medium text-zinc-400">Source</th>
+                      <th className="px-5 py-3 text-left font-medium text-zinc-400">Destination</th>
+                      <th className="px-5 py-3 text-left font-medium text-zinc-400">Status</th>
+                      <th className="px-5 py-3 text-right font-medium text-zinc-400">Time</th>
                     </tr>
                   </thead>
                   <tbody>
                     {repairs.length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="px-5 py-16 text-center text-zinc-500">
+                        <td colSpan={6} className="px-5 py-16 text-center text-zinc-400">
                           No repair jobs yet. Kill a node or corrupt a replica to watch self-healing.
                         </td>
                       </tr>
                     ) : (
                       repairs.slice(0, 20).map(job => (
-                        <tr key={job.id} className="border-b border-[#161616] hover:bg-blue-50 transition">
-                          <td className="px-5 py-3 font-mono text-zinc-500 text-[11px]">{job.id}</td>
+                        <tr key={job.id} className="border-b border-[#161616] hover:bg-[#091126] transition">
+                          <td className="px-5 py-3 font-mono text-zinc-400 text-[11px]">{job.id}</td>
                           <td className="px-5 py-3">
-                            <span className="px-2 py-0.5 rounded-md bg-white border border-blue-200 text-zinc-500">{job.reason}</span>
+                            <span className="px-2 py-0.5 rounded-md bg-[#091126] border border-[#1E2D5A] text-zinc-400">{job.reason}</span>
                           </td>
-                          <td className="px-5 py-3 font-mono text-zinc-500 text-[11px]">{job.sourceNodeId || '—'}</td>
-                          <td className="px-5 py-3 font-mono text-zinc-500 text-[11px]">{job.destinationNodeId}</td>
+                          <td className="px-5 py-3 font-mono text-zinc-400 text-[11px]">{job.sourceNodeId || '—'}</td>
+                          <td className="px-5 py-3 font-mono text-zinc-400 text-[11px]">{job.destinationNodeId}</td>
                           <td className="px-5 py-3">
                             <Badge
                               variant={
@@ -766,7 +766,7 @@ export default function Dashboard() {
                               {job.status}
                             </Badge>
                           </td>
-                          <td className="px-5 py-3 text-right font-mono text-zinc-500 text-[11px]">
+                          <td className="px-5 py-3 text-right font-mono text-zinc-400 text-[11px]">
                             {new Date(job.createdAt).toLocaleTimeString()}
                           </td>
                         </tr>
@@ -786,21 +786,21 @@ export default function Dashboard() {
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
           onClick={e => { if (e.target === e.currentTarget) setSelectedNodeDetail(null); }}
         >
-          <div className="w-full max-w-2xl bg-vault-card border border-vault-border rounded-2xl overflow-hidden shadow-2xl">
+          <div className="w-full max-w-2xl bg-vault-card border border-[#1E2D5A] rounded-2xl overflow-hidden shadow-2xl">
             {/* Modal header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-blue-200">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#1E2D5A]">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-white border border-vault-border">
-                  <Server className="w-4 h-4 text-zinc-500" />
+                <div className="p-2 rounded-lg bg-[#091126] border border-[#1E2D5A]">
+                  <Server className="w-4 h-4 text-zinc-400" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-zinc-900">{selectedNodeDetail.name}</h3>
-                  <p className="text-[11px] text-zinc-500 font-mono mt-0.5">{selectedNodeDetail.address} · {selectedNodeDetail.id}</p>
+                  <h3 className="text-sm font-bold text-zinc-100">{selectedNodeDetail.name}</h3>
+                  <p className="text-[11px] text-zinc-400 font-mono mt-0.5">{selectedNodeDetail.address} · {selectedNodeDetail.id}</p>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedNodeDetail(null)}
-                className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-800 hover:bg-blue-100 transition"
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-[#1a2f60] transition"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -811,11 +811,11 @@ export default function Dashboard() {
               <div className="grid grid-cols-3 gap-3 mb-5">
                 {[
                   { label: 'Status', value: selectedNodeDetail.status, color: selectedNodeDetail.status === 'HEALTHY' ? 'text-green-400' : 'text-red-400' },
-                  { label: 'Storage', value: formatBytes(selectedNodeDetail.usedStorage), color: 'text-zinc-800' },
+                  { label: 'Storage', value: formatBytes(selectedNodeDetail.usedStorage), color: 'text-zinc-100' },
                   { label: 'Risk Score', value: selectedNodeDetail.riskScore, color: (selectedNodeDetail.riskScore || 0) > 0.5 ? 'text-red-400' : 'text-green-400' },
                 ].map(stat => (
-                  <div key={stat.label} className="bg-white border border-blue-200 rounded-xl p-3">
-                    <div className="text-[10px] text-zinc-500 mb-1.5 uppercase tracking-wide font-medium">{stat.label}</div>
+                  <div key={stat.label} className="bg-[#091126] border border-[#1E2D5A] rounded-xl p-3">
+                    <div className="text-[10px] text-zinc-400 mb-1.5 uppercase tracking-wide font-medium">{stat.label}</div>
                     <div className={`text-sm font-bold font-mono ${stat.color}`}>{stat.value}</div>
                   </div>
                 ))}
@@ -824,33 +824,33 @@ export default function Dashboard() {
               {/* Replicas */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-bold text-zinc-700">Stored Replicas</h4>
-                  <span className="text-[11px] text-zinc-500">{selectedNodeDetail.replicas?.length || 0} objects</span>
+                  <h4 className="text-xs font-bold text-zinc-200">Stored Replicas</h4>
+                  <span className="text-[11px] text-zinc-400">{selectedNodeDetail.replicas?.length || 0} objects</span>
                 </div>
 
                 {!selectedNodeDetail.replicas || selectedNodeDetail.replicas.length === 0 ? (
-                  <div className="py-10 text-center text-zinc-500 text-xs border border-blue-200 rounded-xl bg-white">
+                  <div className="py-10 text-center text-zinc-400 text-xs border border-[#1E2D5A] rounded-xl bg-[#091126]">
                     No replicas on this node yet.
                   </div>
                 ) : (
-                  <div className="border border-blue-200 rounded-xl overflow-hidden">
+                  <div className="border border-[#1E2D5A] rounded-xl overflow-hidden">
                     <table className="w-full text-xs">
                       <thead>
-                        <tr className="bg-white border-b border-blue-200">
-                          <th className="px-4 py-2.5 text-left font-medium text-zinc-500">Filename</th>
-                          <th className="px-4 py-2.5 text-left font-medium text-zinc-500">Size</th>
-                          <th className="px-4 py-2.5 text-left font-medium text-zinc-500">Status</th>
-                          <th className="px-4 py-2.5 text-right font-medium text-zinc-500">Test</th>
+                        <tr className="bg-[#091126] border-b border-[#1E2D5A]">
+                          <th className="px-4 py-2.5 text-left font-medium text-zinc-400">Filename</th>
+                          <th className="px-4 py-2.5 text-left font-medium text-zinc-400">Size</th>
+                          <th className="px-4 py-2.5 text-left font-medium text-zinc-400">Status</th>
+                          <th className="px-4 py-2.5 text-right font-medium text-zinc-400">Test</th>
                         </tr>
                       </thead>
                       <tbody>
                         {selectedNodeDetail.replicas.map((rep: any) => (
-                          <tr key={rep.id} className="border-b border-[#161616] last:border-0 hover:bg-blue-50 transition">
+                          <tr key={rep.id} className="border-b border-[#161616] last:border-0 hover:bg-[#091126] transition">
                             <td className="px-4 py-3 flex items-center gap-2">
-                              <FileText className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
-                              <span className="text-zinc-700 font-medium truncate max-w-[150px]">{rep.filename}</span>
+                              <FileText className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
+                              <span className="text-zinc-200 font-medium truncate max-w-[150px]">{rep.filename}</span>
                             </td>
-                            <td className="px-4 py-3 font-mono text-zinc-500">{formatBytes(rep.size)}</td>
+                            <td className="px-4 py-3 font-mono text-zinc-400">{formatBytes(rep.size)}</td>
                             <td className="px-4 py-3">
                               <Badge variant={rep.status === 'HEALTHY' ? 'green' : 'red'}>
                                 {rep.status}
