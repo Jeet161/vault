@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npm install && npx tsc -p packages/shared/tsconfig.json && npx tsc -p packages/db/tsconfig.json && npm run build --workspace=apps/web",
+  "outputDirectory": "apps/web/.next",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "rootDirectory": null
+}

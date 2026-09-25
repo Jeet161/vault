@@ -1,86 +1,14 @@
 services:
-  # ── 1. Next.js Web Dashboard ──────────────────────────────────
-  - type: web
-    name: vault-web
-    runtime: node
-    region: oregon
-    rootDir: apps/web
-    buildCommand: cd ../.. && npm install && npx tsc -p packages/shared/tsconfig.json && npm run build --workspace=apps/web
-    startCommand: npm start --workspace=apps/web
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: NEXT_PUBLIC_API_URL
-        value: https://vault-control-plane.onrender.com
-
-  # ── 2. Control Plane API ──────────────────────────────────────
+  # ── Control Plane API (Free Web Service) ──────────────────────
   - type: web
     name: vault-control-plane
     runtime: node
     region: oregon
-    rootDir: apps/control-plane
-    buildCommand: cd ../.. && npm install && npx tsc -p packages/shared/tsconfig.json && npx tsc -p packages/db/tsconfig.json && npm run build --workspace=apps/control-plane
-    startCommand: node dist/index.js
+    plan: free
+    buildCommand: npm install && npx tsc -p packages/shared/tsconfig.json && npx tsc -p packages/db/tsconfig.json && npx tsc -p apps/control-plane/tsconfig.json
+    startCommand: node apps/control-plane/dist/index.js
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 4000
       - key: DATABASE_URL
-        sync: false   # Set this manually in Render dashboard
-
-  # ── 3. Storage Node 1 ─────────────────────────────────────────
-  - type: web
-    name: vault-node-1
-    runtime: node
-    region: oregon
-    rootDir: services/storage-node
-    buildCommand: cd ../.. && npm install && npx tsc -p packages/shared/tsconfig.json && npm run build --workspace=services/storage-node
-    startCommand: node dist/index.js --port 10000 --id node-1 --name "Storage Node 1"
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: 10000
-
-  # ── 4. Storage Node 2 ─────────────────────────────────────────
-  - type: web
-    name: vault-node-2
-    runtime: node
-    region: oregon
-    rootDir: services/storage-node
-    buildCommand: cd ../.. && npm install && npx tsc -p packages/shared/tsconfig.json && npm run build --workspace=services/storage-node
-    startCommand: node dist/index.js --port 10000 --id node-2 --name "Storage Node 2"
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: 10000
-
-  # ── 5. Storage Node 3 ─────────────────────────────────────────
-  - type: web
-    name: vault-node-3
-    runtime: node
-    region: oregon
-    rootDir: services/storage-node
-    buildCommand: cd ../.. && npm install && npx tsc -p packages/shared/tsconfig.json && npm run build --workspace=services/storage-node
-    startCommand: node dist/index.js --port 10000 --id node-3 --name "Storage Node 3"
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: 10000
-
-  # ── 6. Storage Node 4 ─────────────────────────────────────────
-  - type: web
-    name: vault-node-4
-    runtime: node
-    region: oregon
-    rootDir: services/storage-node
-    buildCommand: cd ../.. && npm install && npx tsc -p packages/shared/tsconfig.json && npm run build --workspace=services/storage-node
-    startCommand: node dist/index.js --port 10000 --id node-4 --name "Storage Node 4"
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PORT
-        value: 10000
+        sync: false    # ← You will paste your NeonDB URL in Render dashboard
