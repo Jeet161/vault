@@ -8,6 +8,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@vault/shared": "file:../../packages/shared",
+    "@vault/db": "file:../../packages/db",
+    "@neondatabase/serverless": "^1.1.0",
+    "drizzle-orm": "^0.30.10",
+    "dotenv": "^16.4.5",
     "next": "^14.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
