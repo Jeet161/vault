@@ -1,5 +1,3 @@
 {
-  "buildCommand": "cd ../.. && npm install && npm run build:shared && npm run build:db && cd apps/web && npx next build",
-  "outputDirectory": ".next",
-  "framework": "nextjs"
+  "buildCommand": "npx tsc -p ../../packages/shared/tsconfig.json && npx tsc -p ../../packages/db/tsconfig.json && next build"
 }
