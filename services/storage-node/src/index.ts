@@ -202,10 +202,10 @@ function parseArgs(args: string[]) {
   return res;
 }
 
-// Auto-start if run directly as CLI
+// Auto-start ONLY if run explicitly via CLI with --port
 const argv = parseArgs(process.argv.slice(2));
-if (argv.port || process.env.PORT) {
-  const PORT = Number(argv.port || process.env.PORT || 5001);
+if (argv.port) {
+  const PORT = Number(argv.port);
   const NODE_ID = String(argv.id || process.env.NODE_ID || 'node-1');
   const NODE_NAME = String(argv.name || process.env.NODE_NAME || `Storage Node (${NODE_ID})`);
   createStorageNodeServer({ port: PORT, nodeId: NODE_ID, nodeName: NODE_NAME });
