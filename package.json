@@ -18,7 +18,7 @@
     "build": "npm run build --workspaces",
     "build:shared": "npx tsc -p packages/shared/tsconfig.json",
     "build:db": "npx tsc -p packages/db/tsconfig.json",
-    "build:control": "npm run build:shared && npm run build:db && npx tsc -p apps/control-plane/tsconfig.json",
+    "build:control": "npm run build:shared && npm run build:db && npx tsc -p services/storage-node/tsconfig.json && npx tsc -p apps/control-plane/tsconfig.json",
     "build:web": "npm run build:shared && npm run build:db && npm run build --workspace=apps/web",
     "test": "vitest run"
   },
