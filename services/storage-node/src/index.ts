@@ -3,7 +3,6 @@ import multipart from '@fastify/multipart';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import minimist from 'minimist';
 
 export function createStorageNodeServer(options: { port: number; nodeId: string; nodeName?: string }) {
   const { port, nodeId } = options;
@@ -186,8 +185,21 @@ export function createStorageNodeServer(options: { port: number; nodeId: string;
   return fastify;
 }
 
+// Simple zero-dependency CLI arg parser
+function parseArgs(args: string[]) {
+  const res: Record<string, string> = {};
+  for (let i = 0; i < args.length; i++) {
+    if (args[i].startsWith('--')) {
+      const key = args[i].slice(2);
+      const val = args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : 'true';
+      res[key] = val;
+    }
+  }
+  return res;
+}
+
 // Auto-start if run directly as CLI
-const argv = minimist(process.argv.slice(2));
+const argv = parseArgs(process.argv.slice(2));
 if (argv.port || process.env.PORT) {
   const PORT = Number(argv.port || process.env.PORT || 5001);
   const NODE_ID = String(argv.id || process.env.NODE_ID || 'node-1');
