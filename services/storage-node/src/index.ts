@@ -174,13 +174,17 @@ export function createStorageNodeServer(options: { port: number; nodeId: string;
     return { nodeId, status: 'HEALTHY' };
   });
 
-  fastify.listen({ port, host: '0.0.0.0' }, (err, address) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log(`[Storage Node] ${nodeName} (${nodeId}) listening at ${address}`);
-    }
-  });
+  try {
+    fastify.listen({ port, host: '127.0.0.1' }, (err, address) => {
+      if (err) {
+        console.warn(`[Storage Node] Warning listening on port ${port}: ${err.message}`);
+      } else {
+        console.log(`[Storage Node] ${nodeName} (${nodeId}) listening at ${address}`);
+      }
+    });
+  } catch (err: any) {
+    console.warn(`[Storage Node] Could not bind port ${port}: ${err.message}`);
+  }
 
   return fastify;
 }

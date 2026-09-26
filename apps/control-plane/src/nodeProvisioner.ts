@@ -2,7 +2,7 @@ import { dbRepo } from '@vault/db';
 import { StorageNodeModel } from '@vault/shared';
 import { createStorageNodeServer } from '@vault/storage-node';
 
-let nextPort = 5005;
+let nextPort = 15000;
 let nextNodeIndex = 5;
 let lastProvisionTime = 0;
 const PROVISION_COOLDOWN_MS = 3000; // Minimum 3 seconds between auto-spawns
