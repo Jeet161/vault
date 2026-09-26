@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "./dist/index.js",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./dist/index.js"
   },
   "type": "module",
   "scripts": {
@@ -14,8 +14,7 @@
   "dependencies": {
     "@vault/shared": "file:../../packages/shared",
     "fastify": "^4.26.2",
-    "@fastify/multipart": "^8.2.0",
-    "minimist": "^1.2.8"
+    "@fastify/multipart": "^8.2.0"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.5",
