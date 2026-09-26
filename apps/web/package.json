@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
-    "build": "cd ../.. && npm run build:shared && npm run build:db && cd apps/web && next build",
+    "build": "next build",
     "start": "next start"
   },
   "dependencies": {
